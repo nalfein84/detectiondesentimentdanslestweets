@@ -24,10 +24,11 @@ Pour mener a bien notre projet nous avons utilisé plusieurs autres corpus de do
 * Un corpus déja annoté que le CERI nous a fournit lors d'un TP précédent comportant [un jeu de donnée de test](Data/data_deft2017/task1-testGold.csv) et [un jeu de donnée d'entrainement](Data/data_deft2017/task1-train.csv) (Taille Entrainement: 3906 Tweets, Taille test : 976 Tweets) 
 * Un jeu de données comportant des polarités de mots annoté par une communauté sur le jeu [likeit](http://www.jeuxdemots.org/likeit.php) regroupant 1.113.390 mots (avec doublons) ainsi que leurs polaritées.  
 * Un jeu de données que plusieurs groupe ont aidé a alimenté et crée initialement par le groupe xxx
+* Une [liste de mots grossier](Data/MotsGrossiers) récupéré [sur wikipedia](https://fr.wiktionary.org/wiki/Cat%C3%A9gorie:Insultes_en_fran%C3%A7ais) et donc certain mots ont était [rajouté par nos soins](Data/MotsGrossiers/MGSupplementaire.txt)
 
 ## Dépendances
 
-Pour pouvoir faire fonctionner l'integralité du projet il faut les librairies Python ci-dessous :
+Pour pouvoir faire fonctionné l'integralité du projet il faut les librairies Python ci-dessous :
 * unidecode
 * emoji
 * re
@@ -42,4 +43,13 @@ Ainsi que la bibliotheque liblinear, fournit dans ce projet, permettant de crée
 
 ## Explication des fichiers .py
 
+Le projets ce découpe en plusieurs fichiers python :
+* Le fichier [projectHelper.py](projectHelper.py) permet de mettre a disposition des autres scriptes, des méthodes simples pour accéder aux fichiers du projet ainsi que certaine transformation banale (concatenation/transformation de label/encodage etc...)
+* Le fichier [Normalisation.py](Normalisation.py) permet la normalisation de toutes les données nécessaires au projet, il crée les fichiers et les places dans un dossier nomée **Normalisation** qui dois être présent a la racine du projet.
+* Le fichier [TweetLabeliserByPolarity.py](TweetLabeliserByPolarity.py) permet de constituer un corpus automatiquement grace à la polarisation des mots. Néanmoins cette approche n'est pas très concluante du a un fort biait psychologique présents sur l'annotation en lui même et est par concéquant fortement déprécié. 
+* Le fichier [SVMscript.py](SVMscript.py) permet le lancement complet d'un algorithme SVM a partir de fichiers déja normaliser
+* Le fichier [RNNscript.py](RNNscript.py) permet le lancement complet d'un réseau neuronal automatique a partir de fichiers normaliser 
+
 ## Remerciement 
+
+Nous remercions les enseignants-chercheurs Richard Dufour, Vincent Labatut et Mickaël Rouvier responsable de l'UE, ainsi que tous les membres du CERI.
