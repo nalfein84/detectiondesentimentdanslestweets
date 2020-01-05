@@ -49,6 +49,7 @@ Le projets ce découpe en plusieurs fichiers python :
 * Le fichier [TweetLabeliserByPolarity.py](TweetLabeliserByPolarity.py) permet de constituer un corpus automatiquement grace à la polarisation des mots. Néanmoins cette approche n'est pas très concluante du a un fort biait psychologique présents sur l'annotation en lui même et est par concéquant fortement déprécié. 
 * Le fichier [SVMscript.py](SVMscript.py) permet le lancement complet d'un algorithme SVM a partir de fichiers déja normaliser
 * Le fichier [RNNscript.py](RNNscript.py) permet le lancement complet d'un réseau neuronal automatique a partir de fichiers normaliser 
+* Les fichiers présent dans le répertoire [ScriptsExemples/](ScriptsExemples/) sont les scriptes utilisé pour les différents testes présents dans le rapport. Pour les faires fonctionnés il faut d'abord les déplacés à la racine du projet. 
 
 ## Remerciement 
 
