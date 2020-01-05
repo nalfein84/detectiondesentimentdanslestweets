@@ -2,7 +2,7 @@
 
 ## Introduction 
 
-Ce projet est le résultat du défi de l'UE (Unité d'Enseignement) Application d'Innovation proposé au Centre d'Enseignement et de Recherche Informatique (CERI) d'Avignon.
+Ce projet est le résultat du défi de l'UE (Unité d'Enseignement) Application d'Innovation proposé au Centre d'Enseignement et de Recherche Informatique (CERI) d'Avignon. Il a étais mené dans son intégralité par Battis Yacine et moi, PASSEMARD Kévin.
 
 ### But du projet :
 
