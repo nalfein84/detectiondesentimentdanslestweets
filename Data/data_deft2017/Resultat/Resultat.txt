@@ -1,0 +1,38 @@
+tracetarace@DESKTOP-M18CH9O:/mnt/d/Bureau/Master 2/Detection de sentiments dans des tweets/Projet$ liblinear-2.30/train -c 1 -e 0.1 data_deft2017/task1-train.svm tweets.model
+........*.
+optimization finished, #iter = 90
+Objective value = -233.474527
+nSV = 2529
+......*.*
+optimization finished, #iter = 71
+Objective value = -277.395768
+nSV = 2786
+....**
+optimization finished, #iter = 44
+Objective value = -121.014183
+nSV = 1666
+........***.*
+optimization finished, #iter = 91
+Objective value = -197.456964
+nSV = 2260
+tracetarace@DESKTOP-M18CH9O:/mnt/d/Bureau/Master 2/Detection de sentiments dans des tweets/Projet$ liblinear-2.30/predict data_deft2017/task1-testGold.svm tweets.model out.txt
+Accuracy = 60.6557% (592/976)
+
+.................................*.**.**
+optimization finished, #iter = 353
+Objective value = -280.092784
+nSV = 2410
+...........*.*
+optimization finished, #iter = 121
+Objective value = -325.705086
+nSV = 2654
+......*
+optimization finished, #iter = 68
+Objective value = -139.954657
+nSV = 1566
+.................................*
+optimization finished, #iter = 331
+Objective value = -236.127384
+nSV = 2133
+tracetarace@DESKTOP-M18CH9O:/mnt/d/Bureau/Master 2/Detection de sentiments dans des tweets/Projet$ liblinear-2.30/predict data_deft2017/task1-testGold.svm tweets.model out.txt
+Accuracy = 59.1189% (577/976)
