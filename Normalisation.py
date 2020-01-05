@@ -193,6 +193,7 @@ def normalisation(message, TypeNormalisation="Simple"):
         mots = result.split()
         result = ""
         for mot in mots:
+            # remplacer les mots grossiers par "Insulte" et retrait des mots vides
             if MotsGrossiers.has_key(mot):
                 result += "Insulte "
             if not ListeMotVide.has_key(mot):

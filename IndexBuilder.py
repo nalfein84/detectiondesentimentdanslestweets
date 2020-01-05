@@ -19,6 +19,7 @@ class IndexBuilder:
                 self.wordID += 1
         self.elemID += 1
 
+    # fonction permettant d'enregistrer la liste des mots et leurs nombre d'occurences dans un fichier
     def SaveNbrOccurence(self, salt=""):
         with open(salt + 'nbrOccurence.txt', 'w') as fn:  # open file safely in append mode
             dico_trie = sorted(self.wordslist.iteritems(), reverse=True,

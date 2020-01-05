@@ -39,7 +39,8 @@ def GetModelFromDocToVec(filenames, pcTrain, vector_size, epochs, testing=False)
         print("Lectures des données sur le fichier " + filename)
         docs += txtFileToListe(filename, withSpaceTreatment=True)
     nbrTrain = int((float(len(docs)) / 100) * pcTrain)
-
+    
+    # separation du corpus en donnees de test et d'entrainement
     trainData = CorpusToDocAndToken(docs[:nbrTrain])
     testData = CorpusToDocAndToken(docs[nbrTrain:], tokenOnly=True)
     

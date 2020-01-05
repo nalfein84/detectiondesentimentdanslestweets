@@ -15,6 +15,7 @@ from keras import backend as K
 from projectHelper import PredictionToOut
 import numpy as np
 from keras.callbacks import Callback
+from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
 # Initialisation des données standards
 listesFichiersEntrainement = ["Normalisation/JSONdata.txt"]
@@ -26,6 +27,7 @@ BestModelFile = ""
 
 class Metrics(Callback):
     def on_train_begin(self, logs={}):
+        # Initialisation des variables
         global BestModelFile
         self.bestModelFile = BestModelFile
         self.bestModel = None
