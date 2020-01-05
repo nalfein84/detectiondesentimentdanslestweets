@@ -19,13 +19,16 @@ class IndexBuilder:
                 self.wordID += 1
         self.elemID += 1
 
-    # fonction permettant d'enregistrer la liste des mots et leurs nombre d'occurences dans un fichier
     def SaveNbrOccurence(self, salt=""):
         with open(salt + 'nbrOccurence.txt', 'w') as fn:  # open file safely in append mode
             dico_trie = sorted(self.wordslist.iteritems(), reverse=True,
                             key=operator.itemgetter(1))
             for row in dico_trie:
                 fn.write(row[0]+':'+str(row[1][0])+'\n')
+
+    def GetNombreOccurence(self):
+        dico_trie = sorted(self.wordslist.iteritems(), reverse=True, key=operator.itemgetter(1))
+        return dico_trie
 
     def SaveCorrelation(self, salt=""):
         with open(salt + 'matriceCorrelation.txt', 'w') as fn:

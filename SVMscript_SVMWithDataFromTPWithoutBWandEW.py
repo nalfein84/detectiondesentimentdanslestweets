@@ -3,6 +3,7 @@ from Normalisation import Normalise_DataDeft2017
 from Normalisation import Normalise_DonneeTest
 from SVMscript import LaunchSVM
 from projectHelper import PredictionToOut
+from Normalisation import EnleverMotVideSpecifique
 from Normalisation import ChargementMotsGrossier
 from Normalisation import ChargementMotsVide
 
@@ -14,6 +15,9 @@ def SVMNormalisation():
     Normalise_DataDeft2017(TypeNormalisation="Complexe")
     # Normalise les données de Testes
     Normalise_DonneeTest(TypeNormalisation="Complexe")
+    EnleverMotVideSpecifique("SVMtrain")
+    EnleverMotVideSpecifique("SVMtest")
+    EnleverMotVideSpecifique("texteDT")
 
 def main():
     SVMNormalisation()

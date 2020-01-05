@@ -15,12 +15,12 @@ def RNN_Normalisation():
     Normalise_DataDeft2017()
     Normalise_Unlabeled()
     Normalise_Json()
-    ConcatFile("Normalisation/JSONdata.txt", "Normalisation/SVMtrain.txt", "Normalisation/AnnotedAndTPdata.txt", withLabel=True)
+    ConcatFile("Normalisation/JSONdata.txt", "Normalisation/AnnotedAndTPdata.txt", "Normalisation/SVMtrain.txt", withLabel=True)
 
 def main():
     RNN_Normalisation()
-    InitDocToVecParameter(["AnnotedAndTPdata", "texteDT", "70kTweet"], 100, 10, 95, TestingDocToVec=True)
-    RNNscript("AnnotedAndTPdata", "texteDT", 95, epochs=5, nameModel="standardsWithAnnotedAndTP-DTVwithNoneAnnoted")
+    InitDocToVecParameter(["AnnotedAndTPdata", "texteDT", "70kTweet"], 50, 10, 90, TestingDocToVec=True)
+    RNNscript("AnnotedAndTPdata", "texteDT", 90, epochs=100, nameModel="standardsWithAnnotedAndTP-DTVwithNoneAnnoted")
     PredictionToOut("GenerationFichier/RNNtestResult.txt")
 
 if __name__ == "__main__":

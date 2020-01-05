@@ -12,8 +12,8 @@ def RNN_Normalisation():
 
 def main():
     RNN_Normalisation()
-    InitDocToVecParameter(["JSONdata", "texteDT"], 50, 20, 98, TestingDocToVec=True)
-    RNNscript("JSONdata", "texteDT", 80, epochs=200, nameModel="standardsWithAnnotedTrainData")
+    InitDocToVecParameter(["JSONdata", "texteDT"], 50, 20, 90, TestingDocToVec=True)
+    RNNscript("JSONdata", "texteDT", 80, epochs=200, SelectBestModel=True, nameModel="standardsWithAnnotedTrainData", typeRNN="Committee", TailleDuComitee=20)
     PredictionToOut("GenerationFichier/RNNtestResult.txt")
 
 if __name__ == "__main__":

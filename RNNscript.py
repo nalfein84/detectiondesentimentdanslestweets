@@ -15,10 +15,11 @@ from keras import backend as K
 from projectHelper import PredictionToOut
 import numpy as np
 from keras.callbacks import Callback
-from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
 # Initialisation des données standards
 listesFichiersEntrainement = ["Normalisation/JSONdata.txt"]
+selectBestModel = False
+LastResult = 0
 tailleVecteurDocToVec = 100
 pcTrain = 90
 epochsDocToVec = 40
@@ -27,58 +28,63 @@ BestModelFile = ""
 
 class Metrics(Callback):
     def on_train_begin(self, logs={}):
-        # Initialisation des variables
-        global BestModelFile
-        self.bestModelFile = BestModelFile
-        self.bestModel = None
-        self.FMesureMax = float(0)
-        self.FMesureMaxDetail = []
+        global BestModelFile, selectBestModel
+        if selectBestModel:    
+            self.bestModelFile = BestModelFile
+            self.bestModel = None
+            self.FMesureMax = float(0)
+            self.FMesureMaxDetail = []
 
     def on_epoch_start(self, epoch, logs={}):
-        if not (self.bestModel == None):
-            self.model = self.bestModel
+        global selectBestModel
+        if selectBestModel:        
+            if not (self.bestModel == None):
+                self.model = self.bestModel
     
     def on_epoch_end(self, epoch, logs={}):
-        val_predict = (np.asarray(self.model.predict(self.validation_data[0]))).round()
-        val_targ = self.validation_data[1]
-        FMesureParLabel = []
-        for label in range(0,4):
-            nbrDocAppartenantLabel = 0
-            nbrDocAttribuerLabel = 0
-            nbrDocCorrectementAttribuerLabel = 0
-            for i in range(0, len(val_targ)):
-                if val_targ[i][label] == 1:
-                    nbrDocAppartenantLabel += 1
-                    if val_predict[i][label] == 1:
-                        nbrDocCorrectementAttribuerLabel += 1
-                else:
-                    if val_predict[i][label] == 1:
-                        nbrDocAttribuerLabel += 1
-            nbrDocAttribuerLabel += nbrDocCorrectementAttribuerLabel
-            try:
-                precision = float(nbrDocCorrectementAttribuerLabel)/float(nbrDocAttribuerLabel)
-            except ZeroDivisionError:
-                precision = 0
-            try:
-                rappel = float(nbrDocCorrectementAttribuerLabel)/float(nbrDocAppartenantLabel)
-            except ZeroDivisionError:
-                rappel = 0
-            Fmesure = 2*((precision*rappel)/(precision+rappel+K.epsilon()))
-            FMesureParLabel.append(Fmesure)
-        FMesureTotal = float(FMesureParLabel[0] + FMesureParLabel[1] + FMesureParLabel[2] + FMesureParLabel[3]) / 4
-        #print("FMesure total = " + str(FMesureTotal) + "([autre]=" + str(FMesureParLabel[0]) + " [mixte]=" + str(FMesureParLabel[1]) +" [positif]=" + str(FMesureParLabel[2]) + " [negatif]=" + str(FMesureParLabel[3]) + ")")
-        if FMesureTotal > self.FMesureMax:
-            self.FMesureMax = FMesureTotal
-            self.FMesureMaxDetail = FMesureParLabel
-            self.model.save(self.bestModelFile)
-            self.bestModel = self.model
+        global selectBestModel
+        if selectBestModel:
+            val_predict = (np.asarray(self.model.predict(self.validation_data[0]))).round()
+            val_targ = self.validation_data[1]
+            FMesureParLabel = []
+            for label in range(0,4):
+                nbrDocAppartenantLabel = 0
+                nbrDocAttribuerLabel = 0
+                nbrDocCorrectementAttribuerLabel = 0
+                for i in range(0, len(val_targ)):
+                    if val_targ[i][label] == 1:
+                        nbrDocAppartenantLabel += 1
+                        if val_predict[i][label] == 1:
+                            nbrDocCorrectementAttribuerLabel += 1
+                    else:
+                        if val_predict[i][label] == 1:
+                            nbrDocAttribuerLabel += 1
+                nbrDocAttribuerLabel += nbrDocCorrectementAttribuerLabel
+                try:
+                    precision = float(nbrDocCorrectementAttribuerLabel)/float(nbrDocAttribuerLabel)
+                except ZeroDivisionError:
+                    precision = 0
+                try:
+                    rappel = float(nbrDocCorrectementAttribuerLabel)/float(nbrDocAppartenantLabel)
+                except ZeroDivisionError:
+                    rappel = 0
+                Fmesure = 2*((precision*rappel)/(precision+rappel+K.epsilon()))
+                FMesureParLabel.append(Fmesure)
+            FMesureTotal = float(FMesureParLabel[0] + FMesureParLabel[1] + FMesureParLabel[2] + FMesureParLabel[3]) / 4
+            #print("FMesure total = " + str(FMesureTotal) + "([autre]=" + str(FMesureParLabel[0]) + " [mixte]=" + str(FMesureParLabel[1]) +" [positif]=" + str(FMesureParLabel[2]) + " [negatif]=" + str(FMesureParLabel[3]) + ")")
+            if FMesureTotal > self.FMesureMax:
+                self.FMesureMax = FMesureTotal
+                self.FMesureMaxDetail = FMesureParLabel
+                self.model.save(self.bestModelFile)
+                self.bestModel = self.model
         return
 
     def on_train_end(self, logs={}):
-        print("Entrainement fini, Resultat : ")
-        print("FMesure total = " + str(self.FMesureMax) + "([autre]=" + str(self.FMesureMaxDetail[0]) + " [mixte]=" + str(self.FMesureMaxDetail[1]) +" [positif]=" + str(self.FMesureMaxDetail[2]) + " [negatif]=" + str(self.FMesureMaxDetail[3]) + ")")
-        
-
+        global selectBestModel, LastResult
+        if selectBestModel:
+            print("Entrainement fini, Resultat : ")
+            print("FMesure total = " + str(self.FMesureMax) + "([autre]=" + str(self.FMesureMaxDetail[0]) + " [mixte]=" + str(self.FMesureMaxDetail[1]) +" [positif]=" + str(self.FMesureMaxDetail[2]) + " [negatif]=" + str(self.FMesureMaxDetail[3]) + ")")
+            LastResult = self.FMesureMax
 
 def InitDocToVecParameter(fichiersEntrainementDocToVec, tailleVecteur, epochs, pourcentageTrain, TestingDocToVec=False):
     global listesFichiersEntrainement, tailleVecteurDocToVec, pcTrain, epochsDocToVec, testingDocToVec
@@ -112,14 +118,15 @@ def getFFWModel(shape, input, activationType, metrics):
             model.add(Dense(layer, activation=activationType))
             model.add(Dropout(0.2))
 
-    model.add(Dense(4, activation='softmax')) # Verifier Sigmoid :/
+    model.add(Dense(4, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=metrics)
     return model
 
-def RNNscript(fichierEntrainement, predictFile, pourcentageTrain, shapeRNN=[200,150,100], nameModel="RNNmodel", typeRNN="FFW", TailleDuComitee=0, activationType='relu', batch_size=32, epochs=10):
-    global listesFichiersEntrainement, tailleVecteurDocToVec, pcTrain, epochsDocToVec, testingDocToVec
+def RNNscript(fichierEntrainement, predictFile, pourcentageTrain, shapeRNN=[200,150,100], nameModel="RNNmodel", typeRNN="FFW", TailleDuComitee=0, activationType='relu', batch_size=32, epochs=10, SelectBestModel=False, FMaxValue=0):
+    global listesFichiersEntrainement, tailleVecteurDocToVec, pcTrain, epochsDocToVec, testingDocToVec, selectBestModel, LastResult
+    selectBestModel = SelectBestModel
     if typeRNN == "Committee" and TailleDuComitee == 0:
-        print("Nombre d'expert non indiqué, veuillez renseigner le parametre TailleDuComitee")
+        print("Nombre d'expert non indiqué, veuillez renseigner le parametre TailleDuComitee ")
         quit()
     docToVecModel = GetModelFromDocToVec(listesFichiersEntrainement, pcTrain, tailleVecteurDocToVec, epochsDocToVec, testing=testingDocToVec)
     docToVecModel.save("GenerationFichier/Models/DocToVec/" + nameModel + "_DocToVec")
@@ -159,7 +166,8 @@ def RNNscript(fichierEntrainement, predictFile, pourcentageTrain, shapeRNN=[200,
         # Lancement de l'entrainement
         callbackMetric = Metrics()
         model.fit(vectorTrain, trainLabel, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[callbackMetric] ,validation_data=(vectorTest, testLabel))
-        model = load_model(BestModelFile)
+        if selectBestModel:
+            model = load_model(BestModelFile)
         score = model.evaluate(vectorTest, testLabel, verbose=0)
         print('Test loss:', score[0])
         print('Test accuracy:', score[1])
@@ -176,12 +184,19 @@ def RNNscript(fichierEntrainement, predictFile, pourcentageTrain, shapeRNN=[200,
         print("Creation du commitée (model FFW)")
         for i in range(0,TailleDuComitee):
             model = getFFWModel(shapeRNN, tailleVecteurDocToVec, activationType, metrics)
-            BestModelFile = "GenerationFichier/Models/RNN/" + nameModel + str(i) + ".hdf5"
+            if selectBestModel:
+                BestModelFile = "GenerationFichier/Models/RNN/" + nameModel + str(i) + ".hdf5"
             callbackMetric = Metrics()
             model.fit(vectorTrain, trainLabel, batch_size=batch_size, epochs=epochs, verbose=0, callbacks=[callbackMetric] ,validation_data=(vectorTest, testLabel))
-            models.append(load_model(BestModelFile))
+            if selectBestModel:
+                models.append(load_model(BestModelFile))
+            else:
+                models.append(model)
+            
+            
             print(str((i+1)*(100/TailleDuComitee)) + "%")
         expertsResult = []
+        TailleDuComitee = len(models)
         for numExpert in range(0,TailleDuComitee):
             score = models[numExpert].evaluate(vectorTest, testLabel, verbose=0)
             poids = score[1]
@@ -197,12 +212,6 @@ def RNNscript(fichierEntrainement, predictFile, pourcentageTrain, shapeRNN=[200,
             indexMax = result.index(max(result))
             labelResult.append(str(indexMax) + "\n")
         WriteInFile("GenerationFichier/RNNtestResult.txt", labelResult)
-
-
-        
-            
-            
-
 
     else:
         raise ValueError("Le model n'est pas reconnu : vérifié la valeur du type de réseau neuronal demandé")

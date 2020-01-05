@@ -16,7 +16,7 @@ def RNN_Normalisation():
 def main():
     #RNN_Normalisation()
     InitDocToVecParameter(["JSONdata", "texteDT", "70kTweet"], 50, 10, 95, TestingDocToVec=True)
-    RNNscript("JSONdata", "texteDT", 85, epochs=200, nameModel="standardsWithAnnotedTrainDataDTVwithNoneAnnoted")
+    RNNscript("JSONdata", "texteDT", 85, epochs=200, FMaxValue=0.40 ,SelectBestModel=True, TailleDuComitee=20, typeRNN="Committee" ,nameModel="standardsWithAnnotedTrainDataDTVwithNoneAnnoted")
     PredictionToOut("GenerationFichier/RNNtestResult.txt")
 
 if __name__ == "__main__":

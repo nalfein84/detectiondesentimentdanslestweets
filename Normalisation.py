@@ -164,7 +164,29 @@ def Normalise_Json(TypeNormalisation="Simple"):
     WriteInFile("Normalisation/JSONdata.txt", listeTweet)
     WriteInFile("Normalisation/JSONdatalabel.txt", listeTweetlabel)
 
-
+def EnleverMotVideSpecifique(fichier):
+    pathFile = "Normalisation/" + fichier + ".txt"
+    index = IndexBuilder()
+    lignes = txtFileToListe(pathFile, withSpaceTreatment=True)
+    for ligne in lignes:
+        for mot in ligne.split():
+            index.AddElem(mot)
+    nbrOccurences = index.GetNombreOccurence()
+    pc10 = int(float(len(lignes))/100*10)
+    motVideSpecifique = {}
+    for nbrOccurence in nbrOccurences:
+        occurence = nbrOccurence[0] 
+        nbr = nbrOccurence[1][0]
+        if nbr > pc10:
+            motVideSpecifique[occurence] = 0
+    res = ""
+    for ligne in lignes:
+        for mot in ligne.split():
+            if not motVideSpecifique.has_key(mot):
+                res += mot + " "
+        res += "\n"
+    print(motVideSpecifique)
+    WriteInFile(pathFile, res)
 
 def Normalise_DonneeTest(TypeNormalisation="Simple"):
     fileName = "Data/donneeTest.txt"
@@ -193,7 +215,6 @@ def normalisation(message, TypeNormalisation="Simple"):
         mots = result.split()
         result = ""
         for mot in mots:
-            # remplacer les mots grossiers par "Insulte" et retrait des mots vides
             if MotsGrossiers.has_key(mot):
                 result += "Insulte "
             if not ListeMotVide.has_key(mot):
